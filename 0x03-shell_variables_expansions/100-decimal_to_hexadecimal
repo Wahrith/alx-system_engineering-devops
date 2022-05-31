@@ -1,3 +1,2 @@
-#!/bin/bash
-print "%x
+#!/bin/bash\printf "%x
 " $DECIMAL
