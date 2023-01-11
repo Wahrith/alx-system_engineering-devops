@@ -1,96 +1,44 @@
-# 0x13. Firewall 
+# 0x13 Firewall :wrench:
 
-<p align="center" />
-  <img src="https://s3.amazonaws.com/intranet-projects-files/holbertonschool-sysadmin_devops/284/V1HjQ1Y.png" />
-</p>
+> Using a shell script is most useful for repetitive tasks that may be time consuming to execute by typing one line at a time. A few examples of applications shell scripts can be used for include: Automating the code compiling process. Running a program or creating a program environment. This project covers Firewall configuration for DevOps development
 
-### Your servers without a firewall...
+At the end of this project, I was able to solve these questions:
 
-<p align="center" />
-  <img src="https://s3.amazonaws.com/intranet-projects-files/holbertonschool-sysadmin_devops/155/holbertonschool-firewall.gif" />
-</p>
+* What is a firewall and how to setup a firewall in a web infrastucture from CLI
 
 
-## Resource
+## Tasks :heavy_check_mark:
 
-- [What is a firewall](https://en.wikipedia.org/wiki/Firewall_%28computing%29) 
-- [Port forwarding with iptables](https://www.cogini.com/blog/port-forwarding-with-iptables/)
+0. What is HTTPS? / Why do you need HTTPS? / You want to setup HTTPS on your website, where shall you place the certificate?
+1. Install the ufw firewall and setup a few rules on web-01.
+2. Firewall redirects port 8080/TCP to port 80/TCP.
 
-## Tasks
 
-<details>
-<summary><a href="./0-block_all_incoming_traffic_but">0. Block all incoming traffic but</a></summary><br>
-<a href='https://postimages.org/' target='_blank'><img src='https://i.postimg.cc/qq0ZGZVq/image.png' border='0' alt='image'/></a>
-</details>
 
-<details>
-<summary><a href="./100-port_forwarding">1. Port forwarding</a></summary><br>
+## Results :chart_with_upwards_trend:
 
-Firewalls can not only filter requests, they can also forward them.
+| Filename |
+| ------ |
+| [0-firewall_ABC](https://github.com/edward0rtiz/holberton-system_engineering-devops/blob/master/0x13-firewall/0-firewall_ABC)|
+| [1-block_all_incoming_traffic_but](https://github.com/edward0rtiz/holberton-system_engineering-devops/blob/master/0x13-firewall/1-block_all_incoming_traffic_but)|
+| [100-port_forwarding](https://github.com/edward0rtiz/holberton-system_engineering-devops/blob/master/0x13-firewall/100-port_forwarding)|
 
-Requirements:
+## Additional info :construction:
+### Resources
 
-	- Configure web-01 so that its firewall redirects port `8080/TCP` to port `80/TCP`.
-	- Your answer file should be a copy of the `ufw` configuration file that you modified to make this happen
-Terminal in `web-01`:
+- emacs
+- BASH
+- Debian 9 stable / Ubuntu 16.04 / Ubuntu 18.04 
+- Shellcheck
 
-```sh
-root@03-web-01:~# netstat -lpn
-Active Internet connections (only servers)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
-tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      2473/nginx
-tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      978/sshd
-tcp6       0      0 :::80                   :::*                    LISTEN      2473/nginx
-tcp6       0      0 :::22                   :::*                    LISTEN      978/sshd
-udp        0      0 0.0.0.0:68              0.0.0.0:*                           594/dhclient
-udp        0      0 0.0.0.0:54432           0.0.0.0:*                           594/dhclient
-udp6       0      0 :::32563                :::*                                594/dhclient
-Active UNIX domain sockets (only servers)
-Proto RefCnt Flags       Type       State         I-Node   PID/Program name    Path
-unix  2      [ ACC ]     SEQPACKET  LISTENING     7175     433/systemd-udevd   /run/udev/control
-unix  2      [ ACC ]     STREAM     LISTENING     6505     1/init              @/com/ubuntu/upstart
-unix  2      [ ACC ]     STREAM     LISTENING     8048     741/dbus-daemon     /var/run/dbus/system_bus_socket
-unix  2      [ ACC ]     STREAM     LISTENING     8419     987/acpid           /var/run/acpid.socket
-root@03-web-01:~#
-root@03-web-01:~# grep listen /etc/nginx/sites-enabled/default
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
-    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-#   listen 8000;
-#   listen somename:8080;
-#   listen 443;
-root@03-web-01:~#
+
+### Try It On Your Machine :computer:
+```bash
+git clone https://github.com/edward0rtiz/holberton-system_engineering-devops.git
+cd 0x13-firewall
+cat FILENAME
+ufw status
+netstat -lpn
+curl -sI web-01.SERVER.online:8080
 ```
 
-- My web server `nginx` is only listening on port `80`
-- `netstat` shows that nothing is listening on `8080`
-Terminal in `web-02`:
-
-```sh
-ubuntu@03-web-02:~$ curl -sI web-01.holberton.online:80
-HTTP/1.1 200 OK
-Server: nginx/1.4.6 (Ubuntu)
-Date: Tue, 07 Mar 2017 02:14:41 GMT
-Content-Type: text/html
-Content-Length: 612
-Last-Modified: Tue, 04 Mar 2014 11:46:45 GMT
-Connection: keep-alive
-ETag: "5315bd25-264"
-Accept-Ranges: bytes
-
-ubuntu@03-web-02:~$ curl -sI web-01.holberton.online:8080
-HTTP/1.1 200 OK
-Server: nginx/1.4.6 (Ubuntu)
-Date: Tue, 07 Mar 2017 02:14:43 GMT
-Content-Type: text/html
-Content-Length: 612
-Last-Modified: Tue, 04 Mar 2014 11:46:45 GMT
-Connection: keep-alive
-ETag: "5315bd25-264"
-Accept-Ranges: bytes
-
-ubuntu@03-web-02:~$
-```
-I use curl to query `web-01.holberton.online`, and since my firewall is forwarding the ports, I get a `HTTP 200` response on port `80/TCP` and also on port `8080/TCP`.
-
-</details>
